@@ -36,10 +36,15 @@ async def query_document(request: QueryRequest) -> Union[QueryResponse, ErrorRes
     
     - **query**: The question to ask about the document (3-500 characters)
     - **k**: Number of relevant chunks to retrieve (1-10, default: 3)
+    - **namespace**: Optional namespace to search in (defaults to configured namespace)
     """
     try:
         # Get relevant chunks from vector store
-        results = document_service.similarity_search(request.query, k=request.k)
+        results = document_service.similarity_search(
+            request.query, 
+            k=request.k,
+            namespace=request.namespace
+        )
         
         if not results:
             raise HTTPException(

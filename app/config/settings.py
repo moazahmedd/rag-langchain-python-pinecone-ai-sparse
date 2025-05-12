@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     
     # Pinecone settings
     PINECONE_INDEX_NAME: str = "rag-pdf-langchain"
-    PINECONE_NAMESPACE: str = "think-and-grow-rich"
+    # PINECONE_NAMESPACE: str = "think-and-grow-rich"
     
     # Document settings
     PDF_PATH: str = str(DATA_DIR / "Think-And-Grow-Rich.pdf")

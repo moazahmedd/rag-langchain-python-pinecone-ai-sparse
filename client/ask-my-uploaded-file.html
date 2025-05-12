@@ -11,12 +11,12 @@
             background: #202124;
             color: #f1f1f1;
             margin: 0;
-            min-height: 100vh;
+            min-height: 80vh;
         }
 
         .container {
             background: #262a32;
-            padding: 64px 36px 64px 36px;
+            padding: 36px 36px 64px 36px;
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 1.5px 6px rgba(0, 0, 0, 0.10);
             max-width: 60vw;
@@ -36,51 +36,261 @@
             text-align: center;
             margin-bottom: 36px;
             font-weight: 700;
-            font-size: 2.1rem;
+            font-size: 2.5rem;
             letter-spacing: 0.5px;
         }
 
+        .title-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(36, 40, 48, 0.95);
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 16px 32px 16px 32px;
+            margin-bottom: 40px;
+            margin-top: 0;
+            width: 100%;
+            max-width: 900px;
+            box-sizing: border-box;
+        }
+
+        .title-container h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: #23272f;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            padding: 2px 4px 2px 12px;
+            position: relative;
+        }
+
+        .custom-dropdown {
+            position: relative;
+            min-width: 180px;
+            max-width: 220px;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .dropdown-selected {
+            background: #23272f;
+            color: #f1f1f1;
+            border: 2px solid #4f8cff;
+            border-radius: 6px 0 0 6px;
+            padding: 7px 12px;
+            min-width: 180px;
+            max-width: 220px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            transition: border-color 0.2s;
+        }
+
+        .dropdown-selected:after {
+            content: '\25BC';
+            font-size: 0.8em;
+            margin-left: 10px;
+            color: #b0b3b8;
+        }
+
+        .dropdown-list {
+            display: none;
+            position: absolute;
+            top: 110%;
+            left: 0;
+            width: 100%;
+            background: #23272f;
+            border: 2px solid #4f8cff;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 16px rgba(79, 140, 255, 0.10);
+            z-index: 10;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        .dropdown-list.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 14px;
+            color: #f1f1f1;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .dropdown-item.selected {
+            background: #2d3340;
+        }
+
+        .dropdown-item:hover {
+            background: #263a5a;
+        }
+
+        .dropdown-delete {
+            color: #ff4d4f;
+            font-size: 0.8em;
+            margin-left: 12px;
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+
+        .dropdown-delete:hover {
+            color: #ff1a1a;
+        }
+
+        .add-button {
+            background: linear-gradient(90deg, #4f8cff 60%, #007bff 100%);
+            color: #fff;
+            border: 2px solid #4f8cff;
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+            width: 44px;
+            height: 54px;
+            font-size: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+            margin: 0;
+            box-shadow: none;
+            box-sizing: border-box;
+        }
+
+        .add-button:hover,
+        .add-button:focus {
+            background: linear-gradient(90deg, #007bff 60%, #4f8cff 100%);
+            box-shadow: 0 2px 8px rgba(79, 140, 255, 0.18);
+            border-color: #007bff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(79, 140, 255, 0.18);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #23272f;
+            padding: 32px 28px 28px 28px;
+            border-radius: 18px;
+            width: 95%;
+            max-width: 410px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1.5px solid #2d3340;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 1.5px 6px rgba(0, 0, 0, 0.10);
+            box-sizing: border-box;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .modal-header h2 {
+            margin: 0 0 2px 0;
+            color: #fff;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: #b0b3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: auto;
+            margin: 0;
+            transition: color 0.2s;
+        }
+
+        .close-button:hover {
+            color: #b0b3b8;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
         .form-group {
-            margin-bottom: 32px;
+            margin-bottom: 14px;
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
         }
 
         label {
-            margin-bottom: 10px;
+            margin-bottom: 4px;
             color: #b0b3b8;
-            font-size: 1.08rem;
+            font-size: 0.98rem;
             font-weight: 500;
+            letter-spacing: 0.1px;
         }
 
         .input-wrapper {
             width: 100%;
-            max-width: 520px;
+            max-width: 100%;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             margin-bottom: 0;
         }
 
         input[type="text"] {
             width: 100%;
-            max-width: 520px;
-            padding: 14px 18px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.13rem;
+            max-width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #32343a;
+            border-radius: 7px;
+            font-size: 1.05rem;
             background: #23272f;
             color: #f1f1f1;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
-            outline: 2px solid #353a40;
-            transition: outline 0.2s, box-shadow 0.2s;
+            box-shadow: none;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
             box-sizing: border-box;
         }
 
         input[type="text"]:focus {
-            outline: 2px solid #4f8cff;
-            box-shadow: 0 4px 16px rgba(79, 140, 255, 0.10);
+            border-color: #4f8cff;
+            box-shadow: 0 2px 8px rgba(79, 140, 255, 0.10);
         }
 
         button {
@@ -196,14 +406,103 @@
             margin-top: 14px;
             display: none;
             text-align: center;
-            font-size: 1.08rem;
+            font-size: 1.01rem;
+            min-height: 18px;
+        }
+
+        select {
+            width: 100%;
+            max-width: 520px;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.13rem;
+            background: #23272f;
+            color: #f1f1f1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+            outline: 2px solid #353a40;
+            transition: outline 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: 2px solid #4f8cff;
+            box-shadow: 0 4px 16px rgba(79, 140, 255, 0.10);
+        }
+
+        select option {
+            background: #23272f;
+            color: #f1f1f1;
+            padding: 14px;
+        }
+
+        .modal-loader {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .modal-error {
+            color: #ff4d4f;
+            margin-top: 14px;
+            margin-bottom: 0;
+            text-align: center;
+            font-size: 1.01rem;
+            display: none;
+            min-height: 18px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Document QA System</h1>
+        <div class="title-container">
+            <h1>Document QA System</h1>
+            <div class="header-controls">
+                <div class="custom-dropdown" id="namespaceDropdown">
+                    <div class="dropdown-selected" id="dropdownSelected" onclick="toggleDropdown()">Select namespace
+                    </div>
+                    <div class="dropdown-list" id="dropdownList"></div>
+                </div>
+                <button class="add-button" onclick="openUploadModal()">+</button>
+            </div>
+        </div>
+
+        <!-- Upload Modal -->
+        <div id="uploadModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Upload Document</h2>
+                    <button class="close-button" onclick="closeUploadModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="documentTitle">Document Title:</label>
+                        <input type="text" id="documentTitle" placeholder="Enter document title...">
+                    </div>
+                    <div class="form-group">
+                        <label for="documentUrl">Document URL:</label>
+                        <input type="text" id="documentUrl" placeholder="Enter PDF URL...">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="uploadBtn" onclick="uploadDocument()">
+                        <span class="upload-text">Upload</span>
+                        <span class="typing" style="display:none;">
+                            <span></span><span></span><span></span>
+                        </span>
+                    </button>
+                </div>
+                <div class="modal-error" id="modalUploadError"></div>
+                <div class="modal-loader" id="modalUploadLoader">
+                    <div class="typing">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="form-group">
             <label for="query">Enter your question:</label>
@@ -231,8 +530,95 @@
     </div>
 
     <script>
+        let namespaces = [];
+        let selectedNamespace = '';
+        window.onload = async function () {
+            await loadNamespaces();
+        };
+
+        async function loadNamespaces() {
+            try {
+                const response = await fetch('http://localhost:8080/api/v1/documents/namespaces');
+                const data = await response.json();
+                namespaces = data.namespaces;
+                renderDropdown();
+            } catch (error) {
+                showError('Failed to load documents. Please refresh the page.');
+            }
+        }
+
+        function renderDropdown() {
+            const dropdownList = document.getElementById('dropdownList');
+            const dropdownSelected = document.getElementById('dropdownSelected');
+            dropdownList.innerHTML = '';
+            if (!namespaces.length) {
+                dropdownSelected.textContent = 'Select namespace';
+                selectedNamespace = '';
+                handleNamespaceChange();
+                return;
+            }
+            namespaces.forEach(ns => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item' + (selectedNamespace === ns ? ' selected' : '');
+                item.innerHTML = `<span>${ns}</span><span class="dropdown-delete" title="Delete" onclick="event.stopPropagation(); deleteNamespace('${ns}')">&#128465;</span>`;
+                item.onclick = function () {
+                    selectNamespace(ns);
+                };
+                dropdownList.appendChild(item);
+            });
+            // Set selected text
+            dropdownSelected.textContent = selectedNamespace || 'Select namespace';
+        }
+
+        function toggleDropdown() {
+            const list = document.getElementById('dropdownList');
+            list.classList.toggle('open');
+        }
+
+        function selectNamespace(ns) {
+            selectedNamespace = ns;
+            renderDropdown();
+            document.getElementById('dropdownList').classList.remove('open');
+            handleNamespaceChange();
+        }
+
+        async function deleteNamespace(ns) {
+            if (!confirm(`Delete namespace "${ns}"? This cannot be undone.`)) return;
+            try {
+                const response = await fetch(`http://localhost:8080/api/v1/documents?namespace=${encodeURIComponent(ns)}`, {
+                    method: 'DELETE',
+                });
+                if (!response.ok) throw new Error('Failed to delete');
+                namespaces = namespaces.filter(n => n !== ns);
+                if (selectedNamespace === ns) selectedNamespace = '';
+                renderDropdown();
+                handleNamespaceChange();
+                showError('Namespace deleted!', 'success');
+            } catch (e) {
+                showError('Failed to delete namespace.');
+            }
+        }
+
+        function handleNamespaceChange() {
+            const queryInput = document.getElementById('query');
+            const submitButton = document.querySelector('button');
+            if (selectedNamespace) {
+                queryInput.disabled = false;
+                submitButton.disabled = false;
+            } else {
+                queryInput.disabled = true;
+                submitButton.disabled = true;
+            }
+        }
+
         async function submitQuery() {
             const query = document.getElementById('query').value;
+            const namespace = selectedNamespace;
+
+            if (!namespace) {
+                showError('Please select a namespace first');
+                return;
+            }
             if (!query) {
                 showError('Please enter a question');
                 return;
@@ -251,18 +637,18 @@
                     },
                     body: JSON.stringify({
                         query: query,
-                        k: 3
+                        namespace: namespace
                     })
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to get response');
+                    throw new Error('Failed to get answer');
                 }
 
                 const data = await response.json();
                 displayResponse(data);
             } catch (error) {
-                showError('Error: ' + error.message);
+                showError('Failed to get answer. Please try again.');
             } finally {
                 document.getElementById('loading').style.display = 'none';
             }
@@ -293,10 +679,92 @@
             responseDiv.style.display = 'block';
         }
 
-        function showError(message) {
+        function openUploadModal() {
+            document.getElementById('uploadModal').style.display = 'block';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+            // Clear inputs
+            document.getElementById('documentTitle').value = '';
+            document.getElementById('documentUrl').value = '';
+            // Reset modal error and loader
+            const modalError = document.getElementById('modalUploadError');
+            modalError.style.display = 'none';
+            modalError.textContent = '';
+            const modalLoader = document.getElementById('modalUploadLoader');
+            if (modalLoader) modalLoader.style.display = 'none';
+            const uploadBtn = document.getElementById('uploadBtn');
+            if (uploadBtn) uploadBtn.disabled = false;
+        }
+
+        async function uploadDocument() {
+            const uploadBtn = document.getElementById('uploadBtn');
+            const modalError = document.getElementById('modalUploadError');
+            const uploadText = uploadBtn.querySelector('.upload-text');
+            const typing = uploadBtn.querySelector('.typing');
+            modalError.style.display = 'none';
+            modalError.textContent = '';
+
+            // Helper for showing error/success
+            function showModalError(msg, success = false) {
+                modalError.textContent = msg;
+                modalError.style.display = 'block';
+                modalError.style.color = success ? '#52c41a' : '#ff4d4f';
+                uploadBtn.disabled = false;
+                uploadText.style.display = '';
+                typing.style.display = 'none';
+            }
+
+            // Disable button and show loader
+            uploadBtn.disabled = true;
+            uploadText.style.display = 'none';
+            typing.style.display = 'flex';
+
+            const title = document.getElementById('documentTitle').value.trim();
+            const url = document.getElementById('documentUrl').value.trim();
+
+            // Validation
+            if (!title) {
+                showModalError('Please enter a document title');
+                return;
+            }
+            if (!url) {
+                showModalError('Please enter a document URL');
+                return;
+            }
+            if (!url.toLowerCase().endsWith('.pdf')) {
+                showModalError('URL must point to a PDF file');
+                return;
+            }
+
+            try {
+                const namespace = title.toLowerCase().replace(/\s+/g, '-');
+                const response = await fetch('http://localhost:8080/api/v1/documents/upload-url', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, url, namespace })
+                });
+
+                if (!response.ok) throw new Error('Failed to upload document');
+                await loadNamespaces();
+                selectNamespace(namespace);
+                showModalError('Document uploaded successfully!', true);
+                setTimeout(closeUploadModal, 1200);
+            } catch (error) {
+                showModalError('Failed to upload document. Please try again.');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadText.style.display = '';
+                typing.style.display = 'none';
+            }
+        }
+
+        function showError(message, type = 'error') {
             const errorDiv = document.getElementById('error');
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
+            errorDiv.style.color = type === 'success' ? '#52c41a' : '#ff4d4f';
         }
     </script>
 </body>
