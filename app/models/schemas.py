@@ -14,7 +14,7 @@ class QueryRequest(BaseModel):
         max_length=500,
         description="The question to ask about the document"
     )
-    k: int = Field(default=3, ge=1, le=10, description="Number of relevant chunks to retrieve")
+    k: int = Field(default=70, ge=1, le=100, description="Number of relevant chunks to retrieve")
     namespace: str = Field(..., description="Required namespace to search in")
 
     @validator('query')

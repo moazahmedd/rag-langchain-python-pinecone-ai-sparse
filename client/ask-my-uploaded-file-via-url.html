@@ -453,52 +453,6 @@
             display: none;
             min-height: 18px;
         }
-
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #32343a;
-            border-radius: 7px;
-            background: #23272f;
-            color: #f1f1f1;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        input[type="file"]:hover {
-            border-color: #4f8cff;
-        }
-
-        .upload-toggle {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-        .upload-toggle button {
-            flex: 1;
-            margin: 0;
-            padding: 10px;
-            font-size: 1rem;
-            background: #23272f;
-            border: 2px solid #32343a;
-            color: #b0b3b8;
-        }
-
-        .upload-toggle button.active {
-            background: linear-gradient(90deg, #4f8cff 60%, #007bff 100%);
-            border-color: #4f8cff;
-            color: #fff;
-        }
-
-        .upload-form {
-            display: none;
-        }
-
-        .upload-form.active {
-            display: block;
-        }
     </style>
 </head>
 
@@ -524,34 +478,17 @@
                     <button class="close-button" onclick="closeUploadModal()">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="upload-toggle">
-                        <button onclick="switchUploadType('file')" class="active" id="fileUploadBtn">Upload
-                            File</button>
-                        <button onclick="switchUploadType('url')" id="urlUploadBtn">Upload via URL</button>
+                    <div class="form-group">
+                        <label for="documentTitle">Document Title:</label>
+                        <input type="text" id="documentTitle" placeholder="Enter document title...">
                     </div>
-
-                    <!-- File Upload Form -->
-                    <div class="upload-form active" id="fileUploadForm">
-                        <div class="form-group">
-                            <label for="pdfFile">Select PDF File:</label>
-                            <input type="file" id="pdfFile" accept=".pdf" onchange="handleFileSelect(event)">
-                        </div>
-                    </div>
-
-                    <!-- URL Upload Form -->
-                    <div class="upload-form" id="urlUploadForm">
-                        <div class="form-group">
-                            <label for="documentTitle">Document Title:</label>
-                            <input type="text" id="documentTitle" placeholder="Enter document title...">
-                        </div>
-                        <div class="form-group">
-                            <label for="documentUrl">Document URL:</label>
-                            <input type="text" id="documentUrl" placeholder="Enter PDF URL...">
-                        </div>
+                    <div class="form-group">
+                        <label for="documentUrl">Document URL:</label>
+                        <input type="text" id="documentUrl" placeholder="Enter PDF URL...">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="uploadBtn" onclick="handleUpload()">
+                    <button id="uploadBtn" onclick="uploadDocument()">
                         <span class="upload-text">Upload</span>
                         <span class="typing" style="display:none;">
                             <span></span><span></span><span></span>
@@ -595,7 +532,6 @@
     <script>
         let namespaces = [];
         let selectedNamespace = '';
-        let currentUploadType = 'file';
         window.onload = async function () {
             await loadNamespaces();
         };
@@ -750,7 +686,6 @@
         function closeUploadModal() {
             document.getElementById('uploadModal').style.display = 'none';
             // Clear inputs
-            document.getElementById('pdfFile').value = '';
             document.getElementById('documentTitle').value = '';
             document.getElementById('documentUrl').value = '';
             // Reset modal error and loader
@@ -761,135 +696,9 @@
             if (modalLoader) modalLoader.style.display = 'none';
             const uploadBtn = document.getElementById('uploadBtn');
             if (uploadBtn) uploadBtn.disabled = false;
-            // Reset to file upload view
-            switchUploadType('file');
         }
 
-        function switchUploadType(type) {
-            currentUploadType = type;
-            const fileBtn = document.getElementById('fileUploadBtn');
-            const urlBtn = document.getElementById('urlUploadBtn');
-            const fileForm = document.getElementById('fileUploadForm');
-            const urlForm = document.getElementById('urlUploadForm');
-
-            if (type === 'file') {
-                fileBtn.classList.add('active');
-                urlBtn.classList.remove('active');
-                fileForm.classList.add('active');
-                urlForm.classList.remove('active');
-            } else {
-                fileBtn.classList.remove('active');
-                urlBtn.classList.add('active');
-                fileForm.classList.remove('active');
-                urlForm.classList.add('active');
-            }
-        }
-
-        async function handleUpload() {
-            if (currentUploadType === 'file') {
-                await uploadFile();
-            } else {
-                await uploadUrl();
-            }
-        }
-
-        async function uploadFile() {
-            const uploadBtn = document.getElementById('uploadBtn');
-            const modalError = document.getElementById('modalUploadError');
-            const uploadText = uploadBtn.querySelector('.upload-text');
-            const typing = uploadBtn.querySelector('.typing');
-            modalError.style.display = 'none';
-            modalError.textContent = '';
-
-            // Helper for showing error/success
-            function showModalError(msg, success = false) {
-                modalError.textContent = msg;
-                modalError.style.display = 'block';
-                modalError.style.color = success ? '#52c41a' : '#ff4d4f';
-                uploadBtn.disabled = false;
-                uploadText.style.display = '';
-                typing.style.display = 'none';
-            }
-
-            // Disable button and show loader
-            uploadBtn.disabled = true;
-            uploadText.style.display = 'none';
-            typing.style.display = 'flex';
-
-            const fileInput = document.getElementById('pdfFile');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                showModalError('Please select a PDF file');
-                return;
-            }
-
-            if (file.type !== 'application/pdf') {
-                showModalError('Only PDF files are allowed');
-                return;
-            }
-
-            try {
-                // Get pre-signed URL from our API
-                const presignedUrlResponse = await fetch('https://localhost:8080/api/v1/s3-link', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        filename: file.name,
-                        contentType: file.type
-                    })
-                });
-
-                if (!presignedUrlResponse.ok) {
-                    throw new Error('Failed to get upload URL');
-                }
-
-                const { uploadUrl, fileUrl } = await presignedUrlResponse.json();
-
-                // Upload to the pre-signed S3 URL
-                const uploadResponse = await fetch(uploadUrl, {
-                    method: 'PUT',
-                    body: file,
-                    headers: {
-                        'Content-Type': file.type
-                    }
-                });
-
-                if (!uploadResponse.ok) throw new Error('Failed to upload document');
-
-                // Generate a namespace from the filename
-                const namespace = file.name.toLowerCase().replace(/\s+/g, '-').replace('.pdf', '');
-
-                // Add the document to our system
-                const addResponse = await fetch('http://localhost:8080/api/v1/documents/upload-url', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        title: file.name,
-                        url: fileUrl,
-                        namespace: namespace
-                    })
-                });
-
-                if (!addResponse.ok) throw new Error('Failed to add document to system');
-
-                await loadNamespaces();
-                selectNamespace(namespace);
-                showModalError('Document uploaded successfully!', true);
-                setTimeout(closeUploadModal, 1200);
-            } catch (error) {
-                showModalError('Failed to upload document. Please try again.');
-                console.error('Upload error:', error);
-            } finally {
-                uploadBtn.disabled = false;
-                uploadText.style.display = '';
-                typing.style.display = 'none';
-            }
-        }
-
-        async function uploadUrl() {
+        async function uploadDocument() {
             const uploadBtn = document.getElementById('uploadBtn');
             const modalError = document.getElementById('modalUploadError');
             const uploadText = uploadBtn.querySelector('.upload-text');
@@ -948,19 +757,6 @@
                 uploadBtn.disabled = false;
                 uploadText.style.display = '';
                 typing.style.display = 'none';
-            }
-        }
-
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            const modalError = document.getElementById('modalUploadError');
-
-            if (file && file.type !== 'application/pdf') {
-                modalError.textContent = 'Only PDF files are allowed';
-                modalError.style.display = 'block';
-                event.target.value = ''; // Clear the file input
-            } else {
-                modalError.style.display = 'none';
             }
         }
 

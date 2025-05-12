@@ -112,11 +112,11 @@ class DocumentService:
         except Exception as e:
             raise Exception(f"Failed to process PDF from URL: {str(e)}")
 
-    def similarity_search(self, query: str, namespace: str, k: int = 3) -> List[Document]:
+    def similarity_search(self, query: str, namespace: str, k: int = 30) -> List[Document]:
         """
         Search for similar documents
         
-        Args:
+        Args: 
             query: The search query
             namespace: Required namespace to search in
             k: Number of results to return
