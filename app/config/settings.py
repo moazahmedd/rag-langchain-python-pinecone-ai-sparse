@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     
     # Model settings
     EMBEDDING_MODEL: str = "text-embedding-3-small"
-    LLM_MODEL: str = "gpt-4"
+    LLM_MODEL: str = "gpt-4o"
     LLM_TEMPERATURE: float = 0.3
     
     class Config:
@@ -37,7 +37,4 @@ class Settings(BaseSettings):
 
 def get_settings() -> Settings:
     settings = Settings()
-    print(f"\n⚙️  Server Configuration:")
-    print(f"   Port: {settings.PORT}")
-    print(f"   Host: {settings.HOST}\n")
     return settings 
