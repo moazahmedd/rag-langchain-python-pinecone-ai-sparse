@@ -43,7 +43,8 @@ class EmbeddingService:
                 "values": embedding,
                 "metadata": {
                     "text": doc.page_content,
-                    **doc.metadata
+                    "page": doc.metadata.get("page", None),
+                    "page_label": doc.metadata.get("page_label", None),
                 }
             }
             vectors.append(vector)

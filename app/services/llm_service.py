@@ -50,8 +50,8 @@ class LLMService:
 
         # Run the chain
         response = self.outer_chain.invoke({
+            "question": query,
             "context": context,
-            "question": query
         })
 
         return {

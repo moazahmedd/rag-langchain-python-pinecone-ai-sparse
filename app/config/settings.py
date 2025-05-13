@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     HOST: str = os.getenv("HOST", "0.0.0.0")
     
     # Pinecone settings
-    PINECONE_INDEX_NAME: str = "rag-pdf-langchain"
+    PINECONE_INDEX_NAME: str = os.getenv("PINECONE_INDEX")
     # PINECONE_NAMESPACE: str = "think-and-grow-rich"
     
     # Document settings
